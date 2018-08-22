@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'sparkSever'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 10
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
+    compile 'com.sparkjava:spark-core:2.5.4'
+    implementation 'com.google.firebase:firebase-admin:6.3.0'
+    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
+}

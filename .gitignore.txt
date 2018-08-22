@@ -1,0 +1,4 @@
+.idea
+.gradle
+.out
+restServer_firebase.json
