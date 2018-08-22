@@ -9,6 +9,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import utilities.User;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,13 +43,13 @@ public class FirebaseDatabase {
         return true;
     }
 
-    public boolean login(String login, String password) throws ExecutionException, InterruptedException {
+    public User login(String login) throws ExecutionException, InterruptedException {
         documentReference = db.collection("users").document();
         apiFuture = documentReference.get();
         DocumentSnapshot documentSnapshot = apiFuture.get();
         if (documentSnapshot.contains(login)){
-            return true;
+            return new User(login,"null");
         }
-        return false;
+        return null;
     }
 }
