@@ -5,6 +5,7 @@ import utilities.Status;
 import utilities.User;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 import static spark.Spark.*;
 
@@ -16,11 +17,16 @@ public class sparkController {
         get("/hello",(req, res)->"Hello!");
 
         post("/add/:login/:password", (req,res)->{
-            res.type("application/json");
-            User user = new Gson().fromJson(req.body(),User.class);
-            firebaseDatabase.register(user.getLogin(),user.getPassword());
-            System.out.println("hey "+user.getLogin()+"!");
-            return Status.SUCCESS;
+            User testUser = firebaseDatabase.login(req.params(":login"));
+                if(testUser == null){
+                    res.type("application/json");
+                    User user = new Gson().fromJson(req.body(),User.class);
+                    firebaseDatabase.register(user.getLogin(),user.getPassword());
+                    return Status.SUCCESS;
+                }
+                else{
+                   return Status.ERROR;
+                }
         });
 
         get("get/:login", (req,res)->{

@@ -2,10 +2,7 @@ package firebase;
 
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
@@ -19,14 +16,13 @@ import java.util.concurrent.ExecutionException;
 public class FirebaseDatabase {
 
     private Firestore db;
-    private ApiFuture<WriteResult> future;
     private HashMap<String,String> hashMap;
     private DocumentReference documentReference;
     private ApiFuture<DocumentSnapshot> apiFuture;
+    private CollectionReference collection;
 
     public FirebaseDatabase() throws IOException {
         FileInputStream serviceAccount = new FileInputStream("restServer_firebase.json");
-
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
@@ -39,16 +35,18 @@ public class FirebaseDatabase {
         hashMap.clear();
         hashMap.put("login",login);
         hashMap.put("password",password);
-        future = db.collection("users").document().set(hashMap);
+        db.collection("users").document().set(hashMap);
         return true;
     }
 
     public User login(String login) throws ExecutionException, InterruptedException {
-        documentReference = db.collection("users").document();
+        collection = db.collection("users");
+        documentReference = db.collection("users").document(login);
         apiFuture = documentReference.get();
         DocumentSnapshot documentSnapshot = apiFuture.get();
-        if (documentSnapshot.contains(login)){
-            return new User(login,"null");
+        if(documentSnapshot.exists()){
+            return new User(documentSnapshot.getData().get("login").toString(),
+                    documentSnapshot.getData().get("password").toString());
         }
         return null;
     }
