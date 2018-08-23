@@ -1,11 +1,11 @@
 package sparkService;
 import com.google.gson.Gson;
 import firebase.FirebaseDatabase;
+import utilities.Password;
 import utilities.Status;
 import utilities.User;
 
 import java.io.IOException;
-import java.io.StringReader;
 
 import static spark.Spark.*;
 
@@ -32,6 +32,14 @@ public class sparkController {
             if(user == null)
                 return Status.ERROR;
             else return new Gson().toJson(user);
+        });
+
+        post("/addpassword/:login/:site/:password/:user", (req,res)->{
+                res.type("application/json");
+                Password password = new Gson().fromJson(req.body(),Password.class);
+                firebaseDatabase.addPassword(password.getLogin(),password.getPassword(),
+                        password.getSite(),password.getUser());
+                return Status.SUCCESS;
         });
     }
 }

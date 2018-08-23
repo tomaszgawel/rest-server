@@ -36,7 +36,7 @@ public class FirebaseDatabase {
         hashMap.clear();
         hashMap.put("login",login);
         hashMap.put("password",password);
-        db.collection("users").document().set(hashMap);
+        db.collection("users").document(login).set(hashMap);
         return true;
     }
 
@@ -50,5 +50,14 @@ public class FirebaseDatabase {
                     documentSnapshot.getData().get("password").toString());
         }
         return null;
+    }
+
+    public boolean addPassword(String login, String password, String site, String user){
+        hashMap.clear();
+        hashMap.put("login",login);
+        hashMap.put("site",site);
+        hashMap.put("password",password);
+        db.collection("password").document(user).set(hashMap);
+        return true;
     }
 }
