@@ -14,8 +14,6 @@ public class sparkController {
     public void start() throws IOException {
         firebaseDatabase = new FirebaseDatabase();
 
-        get("/hello",(req, res)->"Hello!");
-
         post("/add/:login/:password", (req,res)->{
             User testUser = firebaseDatabase.login(req.params(":login"));
                 if(testUser == null){

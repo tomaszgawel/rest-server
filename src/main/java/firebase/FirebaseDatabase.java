@@ -31,6 +31,7 @@ public class FirebaseDatabase {
         db = FirestoreClient.getFirestore();
         hashMap = new HashMap<>();
     }
+
     public boolean register(String login, String password){
         hashMap.clear();
         hashMap.put("login",login);
